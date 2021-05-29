@@ -1,4 +1,8 @@
 ﻿import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+//import { faStar } from '@fortawesome/free-regular-svg-icons';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+
 import axios from 'axios';
 
 
@@ -74,7 +78,7 @@ export const VideoList = (props) => {
                     </thead>
                     <tbody>
                     {
-                        videos.map(video => (
+                        videos.map((video) => (
                             <tr key={video.videoID}>                               
                                 <td style={{ textDecoration: video.isActive ? "none" : "line-through" }}>
                                     {video.title}
@@ -82,10 +86,13 @@ export const VideoList = (props) => {
                                 <td>
                                     {video.author}
                                 </td>
-                                <td>
-                                    <div style={{ width: `calc(20% * ${video.stars_count}` }}></div>
-                                    <img src="/images/stars.png" alt="Videos"
-                                        title={video.stars_count} />
+                                <td>                                    
+                                    <FontAwesomeIcon icon={faStar} style={{color: video.starsCount > 0 ? 'gold' : 'white' }} />
+                                    <FontAwesomeIcon icon={faStar} style={{ color: video.starsCount > 1 ? 'gold' : 'white' }} />
+                                    <FontAwesomeIcon icon={faStar} style={{ color: video.starsCount > 2 ? 'gold' : 'white' }} />
+                                    <FontAwesomeIcon icon={faStar} style={{ color: video.starsCount > 3 ? 'gold' : 'white' }} />
+                                    <FontAwesomeIcon icon={faStar} style={{ color: video.starsCount > 4 ? 'gold' : 'white' }} />
+                                    
                                 </td>
                                 <td>
                                     <button onClick={() => editHandler(video.videoID)} className="btn btn-warning mr-2" style={{ fontWeight: "bold" }}>Edit</button>
@@ -99,7 +106,7 @@ export const VideoList = (props) => {
                 </table>
             </div>
             <div className="card-footer">
-                <button onClick={createHandler} className="btn btn-primary btn-block"><strong>Create Category</strong></button>
+                <button onClick={createHandler} className="btn btn-primary btn-block"><strong>Create Video</strong></button>
             </div>
         </div>
         

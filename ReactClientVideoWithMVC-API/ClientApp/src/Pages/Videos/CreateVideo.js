@@ -8,15 +8,14 @@ const initialValues = {
     author: '',
     description: '',
     youtubeVid: '',
-    starsCount: 0,
-    categoryID: 0,
-    level: 0,
+    starsCount: '',
+    categoryID: '',
+    level: '',
     isActive: false
 }
 
 export const CreateVideo = props => {
-    const [categories, setCategories] = useState([]);
-    const [video, setVideo] = useState(initialValues);
+    const [categories, setCategories] = useState([]);    
 
     const videoApiUrl = "https://localhost:5001/api/videos"
     const categoryApiUrl = `https://localhost:5001/api/categories`;
@@ -31,18 +30,12 @@ export const CreateVideo = props => {
     }, [categoryApiUrl]);
 
 
-    const formSubmitHandler = (event) => {
-        event.preventDefault();
+    const videoCreateHandler = (video) => {        
+        console.log(video);
         axios.post(videoApiUrl, video)
             .then(res => {
                 props.history.replace('/')
             });
-    }
-
-    const inputChangeHandler = (event) => {
-        event.persist();
-        const { name, value } = event.target;
-        setVideo({ ...video, [name]: value })
     }
 
 
@@ -54,15 +47,14 @@ export const CreateVideo = props => {
     }
 
 
-    return (
+    return (       
         <VideoForm
             categories={categories}
-            video={video}
             backToListHandler={backToListHandler}
-            formSubmitHandler={formSubmitHandler}
-            inputChangeHandler={inputChangeHandler}
-            heading={"Video Form"}
+            heading={"Video Create Form"}
             upsertButton={"Create"}
+            videoInputChangeHandler={videoCreateHandler}
+            initialValues={initialValues}
         />
     );
 }

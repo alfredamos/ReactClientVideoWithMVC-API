@@ -2,8 +2,12 @@
 import { CategoryForm } from '../Utilities/Forms/CategoryForm'
 import axios from 'axios'
 
+
+const initValue = { categoryID: '', categoryName: '' };
+
 export const EditCategory = (props) => {
-    const [category, setCategory] = useState({ categoryID: 0, categoryName: '' });
+    const [category, setCategory] = useState(initValue);
+    const [isLoading, setIsLoading] = useState(false);
 
     const apiUrl = `https://localhost:5001/api/categories/${props.match.params.id}`;
 
@@ -11,22 +15,17 @@ export const EditCategory = (props) => {
         const GetCategory = async () => {
             const result = await axios(apiUrl);
             setCategory(result.data);
-            
+            setIsLoading(true);
         };
         GetCategory();
-    }, [apiUrl]);  
+    }, [apiUrl]);
 
-    const formSubmitHandler = (event) => {
-        event.preventDefault();               
-        axios.put(apiUrl, category)
+
+    const editCategoryHandler = (categoryInput) => {
+        axios.put(apiUrl, categoryInput)
             .then(res => {
                 props.history.push('/categoryList')
             });
-    }
-
-    const inputChangeHandler = (event) => {    
-        const { name, value } = event.target;
-        setCategory({ ...category, [name]: value })         
     }
 
 
@@ -39,13 +38,17 @@ export const EditCategory = (props) => {
 
 
     return (
-        <CategoryForm
-            category={category}
-            backToListHandler={backToListHandler}
-            formSubmitHandler={formSubmitHandler}
-            inputChangeHandler={inputChangeHandler}
-            heading={"Category Edit Form"}
-            upsertButton={"Save"}
-        />
+        <>
+            {
+                isLoading &&
+                <CategoryForm
+                    backToListHandler={backToListHandler}
+                    heading={"Category Edit Form"}
+                    upsertButton={"Save"}
+                    onChangeCategory={editCategoryHandler}
+                    initialCategory={category}
+                />
+            }
+        </>
     );
 }

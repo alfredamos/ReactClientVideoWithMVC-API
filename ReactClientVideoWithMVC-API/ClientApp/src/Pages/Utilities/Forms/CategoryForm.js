@@ -1,8 +1,23 @@
-﻿import React from 'react';
+﻿import React, { useState } from 'react';
 
 
 export const CategoryForm = (props) => {
-    const { category, backToListHandler, formSubmitHandler, heading, inputChangeHandler, upsertButton } = props;
+    const { backToListHandler, heading, upsertButton, onChangeCategory, initialCategory } = props;
+
+    const [category, setCategory] = useState(initialCategory);
+
+
+    const formSubmitHandler = (event) => {
+        event.preventDefault();
+        onChangeCategory(category);
+    }
+
+    const inputChangeHandler = (event) => {
+        event.persist();
+        const { name, value } = event.target;
+        setCategory({ ...category, [name]: value })
+
+    }
 
     return (
         <div className="border">
@@ -13,7 +28,7 @@ export const CategoryForm = (props) => {
                 <form onSubmit={formSubmitHandler}>
                     <div className="form-group">
                         <label htmlFor="categoryName" className="form-control-label"> Category Name</label>
-                        <input
+                        <input 
                             type="text"
                             id="categoryName"
                             name="categoryName"

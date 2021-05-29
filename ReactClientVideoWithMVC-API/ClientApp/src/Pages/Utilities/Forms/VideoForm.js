@@ -1,8 +1,27 @@
-﻿import React from 'react';
+﻿import React, {useState} from 'react';
 
 
 export const VideoForm = (props) => {
-    const {categories, video, backToListHandler, formSubmitHandler, heading, inputChangeHandler, upsertButton } = props;
+    const { categories, backToListHandler, heading, upsertButton, videoInputChangeHandler, initialValues } = props;
+
+    const [video, setVideo] = useState(initialValues);
+
+
+    const formSubmitHandler = (event) => {
+        event.preventDefault();
+        videoInputChangeHandler(video);
+    }
+
+    const inputChangeHandler = (event) => {
+        event.persist();
+        const { name, value } = event.target;
+        setVideo({ ...video, [name]: value })
+    }
+
+    const inputCheckChangeHandler = (event) => {        
+        event.persist();
+        setVideo({ ...video, isActive: event.target.checked })
+    }
 
     return (
         <div className="border">
@@ -74,12 +93,13 @@ export const VideoForm = (props) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label className="form-label">
+                        <label htmlFor="categoryID" className="form-coontrol-label">
                             Category :
                         </label>
                         <select
                             id="categoryID"
                             name="categoryID"
+                            value={video.categoryID}
                             className="form-control"
                             onChange={inputChangeHandler}
                         >
@@ -99,12 +119,13 @@ export const VideoForm = (props) => {
                         </select>
                     </div>
                     <div className="form-group">
-                        <label className="form-label">
+                        <label htmlFor="level" className="form-control-label">
                             Skill Level :
                         </label>
                         <select
                             id="level"
                             name="level"
+                            value={video.level}
                             className="form-control"
                             onChange={inputChangeHandler}
                         >
@@ -113,16 +134,15 @@ export const VideoForm = (props) => {
                             <option value="Intermediate">Intermediate</option>
                             <option value="Advance">Advance</option>
                         </select>
-                    </div>
+                    </div>                   
                     <div className="form-group">
                         <label htmlFor="isActive" className="form-control-label">IsActive</label>
                         <input
-                            type="checkbox"
-                            id="isActive"
+                            type="checkbox"                           
                             name="isActive"
-                            value={video.isActive}                           
+                            checked={video.isActive}
                             className="form-control"                           
-                            onChange={inputChangeHandler}
+                            onChange={inputCheckChangeHandler}
                         />
                     </div>
                     <div className="form-group">
@@ -131,7 +151,7 @@ export const VideoForm = (props) => {
                 </form>
             </div>
             <div className="card-footer">
-                    <button onClick={backToListHandler} className="btn btn-primary btn-block"><strong>Back To Category List</strong></button>
+                    <button onClick={backToListHandler} className="btn btn-primary btn-block"><strong>Back To Video List</strong></button>
              </div>           
         </div>
     );

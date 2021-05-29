@@ -29,18 +29,6 @@ export const DetailVideo = (props) => {
     }, [apiUrl]);
 
 
-    //const backToListHandler = () => {
-    //    props.history.replace({
-    //        pathname: '/videoList'
-    //    });
-
-    //}
-
-    //const deleteHandler = async (id) => {
-    //    props.history.push({
-    //        pathname: `/deleteVideo/${id}`
-    //    });
-    //}
 
     return (
 

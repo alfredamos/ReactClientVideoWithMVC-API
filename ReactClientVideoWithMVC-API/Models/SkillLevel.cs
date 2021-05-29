@@ -9,8 +9,7 @@ namespace ReactClientVideoWithMVC_API.Models
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum SkillLevel
-    {
-        None,
+    {        
         Beginner,
         Intermediate,
         Advance

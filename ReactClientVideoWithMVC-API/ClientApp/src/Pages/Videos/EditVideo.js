@@ -3,57 +3,51 @@ import { VideoForm } from '../Utilities/Forms/VideoForm'
 import axios from 'axios';
 
 
-const initialValues = {
+const initValues = {
     title: '',
     author: '',
     description: '',
     youtubeVid: '',
-    starsCount: 0,
-    categoryID: 0,
-    level: 0,
+    starsCount: '',
+    categoryID: '',
+    level: '',
     isActive: false
 }
 
 export const EditVideo = props => {
     const [categories, setCategories] = useState([]);
-    const [video, setVideo] = useState(initialValues);
+    const [video, setVideo] = useState(initValues);
+    const [isLoading, setIsLoading] = useState(false);
 
     const videoApiUrl = `https://localhost:5001/api/videos/${props.match.params.id}`;
     const categoryApiUrl = `https://localhost:5001/api/categories`;
-    const apiUrl = `https://localhost:5001/api/videos/${props.match.params.id}`;
 
 
     useEffect(() => {
         const GetVideo = async () => {
-            const result = await axios(apiUrl);
-            setVideo(result.data);
-
+            const result = await axios(videoApiUrl);
+            setVideo(result.data); 
+            setIsLoading(true);
         };
         GetVideo();
-    }, [apiUrl]);  
+    }, [videoApiUrl]);
 
 
     useEffect(() => {
         const GetCategories = async () => {
             const result = await axios(categoryApiUrl);
-            setCategories(result.data);
+            setCategories(result.data);            
         };
         GetCategories();
     }, [categoryApiUrl]);
 
 
-    const formSubmitHandler = (event) => {
-        event.preventDefault();
+    const videoEditHandler = (video) => {
+        console.log("In editHandler", video);
         axios.put(videoApiUrl, video)
             .then(res => {
                 props.history.replace('/')
             });
-    }
-
-    const inputChangeHandler = (event) => {
-        event.persist();
-        const { name, value } = event.target;
-        setVideo({ ...video, [name]: value })
     }
 
 
@@ -66,14 +60,19 @@ export const EditVideo = props => {
 
 
     return (
-        <VideoForm
-            categories={categories}
-            video={video}
-            backToListHandler={backToListHandler}
-            formSubmitHandler={formSubmitHandler}
-            inputChangeHandler={inputChangeHandler}
-            heading={"Video Form"}
-            upsertButton={"Save"}
-        />
+        <>
+            {
+                isLoading &&
+                <VideoForm
+                    categories={categories}
+                    backToListHandler={backToListHandler}
+                    heading={"Video Edit Form"}
+                    upsertButton={"Save"}
+                    videoInputChangeHandler={videoEditHandler}
+                    initialValues={video}
+                />
+            }
+        </>
     );
+
 }
