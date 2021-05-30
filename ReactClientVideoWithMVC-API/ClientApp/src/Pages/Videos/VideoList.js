@@ -8,6 +8,7 @@ import axios from 'axios';
 
 export const VideoList = (props) => {
     const [videos, setVideos] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const apiUrl = "https://localhost:5001/api/videos"
 
@@ -46,69 +47,74 @@ export const VideoList = (props) => {
         const GetData = async () => {
             const result = await axios(apiUrl);
             setVideos(result.data);
+            setIsLoading(true);
         };
         GetData();
-    }, [apiUrl]);
+    }, [apiUrl, isLoading]);
 
 
   
 
-    return (        
-        <div className="border">
-            <div className="card-header text-center">
-                <h3>List of Videos</h3>
-            </div>
-            <div className="card-body">
-                <table className="table table-bordered table-striped">
-                    <thead>
-                        <tr>                           
-                            <th>
-                                Title
+    return ( 
+        <>
+            {
+                isLoading &&
+                <div className="border">
+                    <div className="card-header text-center">
+                        <h3>List of Videos</h3>
+                    </div>
+                    <div className="card-body">
+                        <table className="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Title
                             </th>
-                            <th>
-                                Author
+                                    <th>
+                                        Author
                             </th>
-                            <th>
-                                Rating
+                                    <th>
+                                        Rating
                             </th>
-                            <th>
-                                Action
+                                    <th>
+                                        Action
                             </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        videos.map((video) => (
-                            <tr key={video.videoID}>                               
-                                <td style={{ textDecoration: video.isActive ? "none" : "line-through" }}>
-                                    {video.title}
-                                </td>
-                                <td>
-                                    {video.author}
-                                </td>
-                                <td>                                    
-                                    <FontAwesomeIcon icon={faStar} style={{color: video.starsCount > 0 ? 'gold' : 'white' }} />
-                                    <FontAwesomeIcon icon={faStar} style={{ color: video.starsCount > 1 ? 'gold' : 'white' }} />
-                                    <FontAwesomeIcon icon={faStar} style={{ color: video.starsCount > 2 ? 'gold' : 'white' }} />
-                                    <FontAwesomeIcon icon={faStar} style={{ color: video.starsCount > 3 ? 'gold' : 'white' }} />
-                                    <FontAwesomeIcon icon={faStar} style={{ color: video.starsCount > 4 ? 'gold' : 'white' }} />
-                                    
-                                </td>
-                                <td>
-                                    <button onClick={() => editHandler(video.videoID)} className="btn btn-warning mr-2" style={{ fontWeight: "bold" }}>Edit</button>
-                                    <button onClick={() => deleteHandler(video.videoID)} className="btn btn-danger mr-2" style={{ fontWeight: "bold" }}>Delete</button>
-                                    <button onClick={() => detailHandler(video.videoID)} className="btn btn-primary" style={{ fontWeight: "bold" }}>Detail</button>
-                                </td>
-                            </tr>
-                        ))
-                    }
-                    </tbody>
-                </table>
-            </div>
-            <div className="card-footer">
-                <button onClick={createHandler} className="btn btn-primary btn-block"><strong>Create Video</strong></button>
-            </div>
-        </div>
-        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    videos.map((video) => (
+                                        <tr key={video.videoID}>
+                                            <td style={{ textDecoration: video.isActive ? "none" : "line-through" }}>
+                                                {video.title}
+                                            </td>
+                                            <td>
+                                                {video.author}
+                                            </td>
+                                            <td>
+                                                <FontAwesomeIcon icon={faStar} style={{ color: video.starsCount > 0 ? 'gold' : 'white' }} />
+                                                <FontAwesomeIcon icon={faStar} style={{ color: video.starsCount > 1 ? 'gold' : 'white' }} />
+                                                <FontAwesomeIcon icon={faStar} style={{ color: video.starsCount > 2 ? 'gold' : 'white' }} />
+                                                <FontAwesomeIcon icon={faStar} style={{ color: video.starsCount > 3 ? 'gold' : 'white' }} />
+                                                <FontAwesomeIcon icon={faStar} style={{ color: video.starsCount > 4 ? 'gold' : 'white' }} />
+
+                                            </td>
+                                            <td>
+                                                <button onClick={() => editHandler(video.videoID)} className="btn btn-warning mr-2" style={{ fontWeight: "bold" }}>Edit</button>
+                                                <button onClick={() => deleteHandler(video.videoID)} className="btn btn-danger mr-2" style={{ fontWeight: "bold" }}>Delete</button>
+                                                <button onClick={() => detailHandler(video.videoID)} className="btn btn-primary" style={{ fontWeight: "bold" }}>Detail</button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="card-footer">
+                        <button onClick={createHandler} className="btn btn-primary btn-block"><strong>Create Video</strong></button>
+                    </div>
+                </div>
+            }
+        </>
     );
 }
